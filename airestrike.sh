@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo apt update
+
 # Dependency check
 for pkg in figlet lolcat pv fastfetch aircrack-ng; do if ! command -v $pkg &>/dev/null; then 
 echo "Installing $pkg..."
