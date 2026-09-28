@@ -79,7 +79,15 @@ sudo airmon-ng check kill
 sleep 1
 sudo iw dev
 sleep 1
-sudo airmon-ng start wlan0
+if ip link show wlan0mon >/dev/null 2>&1; then
+    echo "[+] wlan0mon is already in monitor mode. Proceeding..."
+elif ip link show wlan0 >/dev/null 2>&1; then
+    echo "[+] Enabling monitor mode on wlan0..."
+   sudo airmon-ng start wlan0
+else
+    echo "[-] Error: Neither wlan0 nor wlan0mon was found."
+    exit 1
+fi
 sleep 4
 sudo airmon-ng check kill
 sleep 1
